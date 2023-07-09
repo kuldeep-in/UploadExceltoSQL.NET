@@ -6,3 +6,71 @@
 <h1>@ViewData["Title"]</h1>
 
 <p>Use this page to detail your site's privacy policy.</p>
+
+<h1>Edit KD01 Data</h1>
+
+<form method="post">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Category Name</th>
+                <th>Parameter Name</th>
+                <th>Case Name</th>
+                <th>Parameter Key</th>
+                <th>Parameter Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var row in Model.kD01Models)
+            {
+                <tr>
+                    <td>@row.ID</td>
+                    <td>@row.CategoryName</td>
+                    <td>@row.ParameterName</td>
+                    <td>@row.CaseName</td>
+                    <td>@row.ParameterKey</td>
+                    <td><input type="text" name="ParameterValue" value="@row.ParameterValue" /></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <button type="submit">Save</button>
+</form>
+
+@*@code
+{
+    private KD01Repository _repository;
+
+    public List<KD01Model>
+    Model { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+    // Initialize the repository with the connection string
+    _repository = new KD01Repository(Configuration.GetConnectionString("DefaultConnection"));
+
+    // Load the first 10 rows from the database
+    Model = await _repository.GetFirst10Rows();
+    }
+
+    protected async Task OnPostAsync()
+    {
+    // Handle the form submission and update the data
+    foreach (var row in Model)
+    {
+    await _repository.UpdateRow(row);
+    }
+
+    // Redirect to a success page or display a success message
+    // Redirect("/SuccessPage");
+    // or
+    // ShowSuccessMessage = true;
+    }
+    }
+*@
+
+
+
+

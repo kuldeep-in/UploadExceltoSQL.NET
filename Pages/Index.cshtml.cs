@@ -1,5 +1,6 @@
 ﻿using DocumentFormat.OpenXml.Spreadsheet;
 using ExcelDataReader;
+using H2Input.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Data;
@@ -115,6 +116,37 @@ namespace H2Input.Pages
 			viewDataTable.Rows.Add(viewDataRow);
 
 			return Page();
+		}
+
+		public async Task<List<KD01Model>> GetAllData()
+		{
+			using (SqlConnection connection = new SqlConnection(connectionString))
+			{
+				await connection.OpenAsync();
+
+				string sql = $"SELECT * FROM {dbtable}";
+				SqlCommand command = new SqlCommand(sql, connection);
+
+				List<KD01Model> rows = new List<KD01Model>();
+				SqlDataReader reader = await command.ExecuteReaderAsync();
+
+				while (reader.Read())
+				{
+					KD01Model row = new KD01Model
+					{
+						ID = (int)reader["ID"],
+						CategoryName = (string)reader["CategoryName"],
+						ParameterName = (string)reader["ParameterName"],
+						CaseName = (string)reader["CaseName"],
+						ParameterKey = (string)reader["ParameterKey"],
+						ParameterValue = (string)reader["ParameterValue"]
+					};
+
+					rows.Add(row);
+				}
+
+				return rows;
+			}
 		}
 
 		//public void OnGet()
@@ -287,5 +319,18 @@ namespace H2Input.Pages
 			//return RedirectToPage("Index");
 			return Page();
 		}
+	}
+}
+
+namespace H2Input.Models
+{
+	public class KD01Model
+	{
+		public int ID { get; set; }
+		public string CategoryName { get; set; }
+		public string ParameterName { get; set; }
+		public string CaseName { get; set; }
+		public string ParameterKey { get; set; }
+		public string ParameterValue { get; set; }
 	}
 }
