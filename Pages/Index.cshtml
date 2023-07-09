@@ -24,20 +24,20 @@
 	@TempData["Message"]
 </div>
 
-@if (Model.capexData != null)//&& Model.CapexData.Rows.Count > 0)
+@if (Model.cat01Data != null)//&& Model.CapexData.Rows.Count > 0)
 {
-	<h3>CAPEX</h3>
+	<h3>Category 01</h3>
 	<table class="table">
 		<thead>
 			<tr>
-				@foreach (DataColumn column in Model.capexData.Columns)
+				@foreach (DataColumn column in Model.cat01Data.Columns)
 				{
 					<th>@column.ColumnName</th>
 				}
 			</tr>
 		</thead>
 		<tbody>
-			@foreach (DataRow row in Model.capexData.Rows)
+			@foreach (DataRow row in Model.cat01Data.Rows)
 			{
 				<tr>
 					@foreach (var item in row.ItemArray)
@@ -50,20 +50,20 @@
 	</table>
 }
 
-@if (Model.opexData != null) //&& Model.OpexData.Rows.Count > 0)
+@if (Model.cat02Data != null) //&& Model.OpexData.Rows.Count > 0)
 {
-	<h3>OPEX</h3>
+	<h3>Category 02</h3>
 	<table class="table">
 		<thead>
 			<tr>
-				@foreach (DataColumn column in Model.opexData.Columns)
+				@foreach (DataColumn column in Model.cat02Data.Columns)
 				{
 					<th>@column.ColumnName</th>
 				}
 			</tr>
 		</thead>
 		<tbody>
-			@foreach (DataRow row in Model.opexData.Rows)
+			@foreach (DataRow row in Model.cat02Data.Rows)
 			{
 				<tr>
 					@foreach (var item in row.ItemArray)
