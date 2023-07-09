@@ -1,0 +1,81 @@
+﻿@page
+@using System.Data;
+@model IndexModel
+@{
+	ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+	<h1 class="display-4">Excel Uploader</h1>
+
+</div>
+
+<form method="post" enctype="multipart/form-data">
+	<div class="form-group">
+		<label for="upload">Select Excel File:</label>
+		<input type="file" id="upload" name="Upload" class="form-control-file" />
+	</div>
+	<button type="submit" class="btn btn-primary">Upload</button>
+
+</form>
+
+
+<div class="alert alert-info mt-4">
+	@TempData["Message"]
+</div>
+
+@if (Model.capexData != null)//&& Model.CapexData.Rows.Count > 0)
+{
+	<h3>CAPEX</h3>
+	<table class="table">
+		<thead>
+			<tr>
+				@foreach (DataColumn column in Model.capexData.Columns)
+				{
+					<th>@column.ColumnName</th>
+				}
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (DataRow row in Model.capexData.Rows)
+			{
+				<tr>
+					@foreach (var item in row.ItemArray)
+					{
+						<td>@item.ToString()</td>
+					}
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+
+@if (Model.opexData != null) //&& Model.OpexData.Rows.Count > 0)
+{
+	<h3>OPEX</h3>
+	<table class="table">
+		<thead>
+			<tr>
+				@foreach (DataColumn column in Model.opexData.Columns)
+				{
+					<th>@column.ColumnName</th>
+				}
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (DataRow row in Model.opexData.Rows)
+			{
+				<tr>
+					@foreach (var item in row.ItemArray)
+					{
+						<td>@item.ToString()</td>
+					}
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+
+
+
+
