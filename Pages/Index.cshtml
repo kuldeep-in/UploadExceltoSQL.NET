@@ -24,53 +24,59 @@
 	@TempData["Message"]
 </div>
 
-@if (Model.cat01Data != null)//&& Model.CapexData.Rows.Count > 0)
+@if (Model.viewDataTable != null)//&& Model.CapexData.Rows.Count > 0)
 {
 	<h3>Category 01</h3>
 	<table class="table">
 		<thead>
 			<tr>
-				@foreach (DataColumn column in Model.cat01Data.Columns)
+				@foreach (DataColumn column in Model.viewDataTable.Columns.Cast<DataColumn>().Skip(1).ToList())
 				{
 					<th>@column.ColumnName</th>
 				}
 			</tr>
 		</thead>
 		<tbody>
-			@foreach (DataRow row in Model.cat01Data.Rows)
+			@foreach (DataRow row in Model.viewDataTable.Rows)
 			{
-				<tr>
-					@foreach (var item in row.ItemArray)
-					{
-						<td>@item.ToString()</td>
-					}
-				</tr>
+				if (row[0].ToString() == "Category01")
+				{
+					<tr>
+						@foreach (var item in row.ItemArray.Skip(1))
+						{
+							<td>@item.ToString()</td>
+						}
+					</tr>
+				}
 			}
 		</tbody>
 	</table>
 }
 
-@if (Model.cat02Data != null) //&& Model.OpexData.Rows.Count > 0)
+@if (Model.viewDataTable != null) //&& Model.OpexData.Rows.Count > 0)
 {
 	<h3>Category 02</h3>
 	<table class="table">
 		<thead>
 			<tr>
-				@foreach (DataColumn column in Model.cat02Data.Columns)
+				@foreach (DataColumn column in Model.viewDataTable.Columns.Cast<DataColumn>().Skip(1).ToList())
 				{
 					<th>@column.ColumnName</th>
 				}
 			</tr>
 		</thead>
 		<tbody>
-			@foreach (DataRow row in Model.cat02Data.Rows)
+			@foreach (DataRow row in Model.viewDataTable.Rows)
 			{
-				<tr>
-					@foreach (var item in row.ItemArray)
-					{
-						<td>@item.ToString()</td>
-					}
-				</tr>
+				if (row[0].ToString() == "Category02")
+				{
+					<tr>
+						@foreach (var item in row.ItemArray.Skip(1))
+						{
+							<td>@item.ToString()</td>
+						}
+					</tr>
+				}
 			}
 		</tbody>
 	</table>

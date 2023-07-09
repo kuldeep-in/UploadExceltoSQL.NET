@@ -16,7 +16,8 @@ namespace H2Input.Pages
 		public DataTable cat01Data { get; set; }
 		public DataTable cat02Data { get; set; }
 
-		public DataTable UploadedDataTable { get; set; }
+		public DataTable sqlDataTable { get; set; }
+		public DataTable viewDataTable { get; set; }
 
 		public IndexModel(ILogger<IndexModel> logger, IConfiguration configuration)
 		{
@@ -43,16 +44,16 @@ namespace H2Input.Pages
 
 				SqlDataReader reader = command.ExecuteReader();
 
-				UploadedDataTable = new DataTable("UploadedData");
-				UploadedDataTable.Columns.Add("CategoryName", typeof(string));
-				UploadedDataTable.Columns.Add("ParameterName", typeof(string));
-				UploadedDataTable.Columns.Add("CaseName", typeof(string));
-				UploadedDataTable.Columns.Add("ParameterKey", typeof(string));
-				UploadedDataTable.Columns.Add("ParameterValue", typeof(string));
+				sqlDataTable = new DataTable("UploadedData");
+				sqlDataTable.Columns.Add("CategoryName", typeof(string));
+				sqlDataTable.Columns.Add("ParameterName", typeof(string));
+				sqlDataTable.Columns.Add("CaseName", typeof(string));
+				sqlDataTable.Columns.Add("ParameterKey", typeof(string));
+				sqlDataTable.Columns.Add("ParameterValue", typeof(string));
 
 				while (reader.Read())
 				{
-					DataRow row = UploadedDataTable.NewRow();
+					DataRow row = sqlDataTable.NewRow();
 					row["CategoryName"] = reader["CategoryName"];
 					row["ParameterName"] = reader["ParameterName"];
 					row["CaseName"] = reader["CaseName"];
@@ -68,29 +69,50 @@ namespace H2Input.Pages
 						columnList.Add($"{reader["CaseName"]}-{reader["ParameterKey"]}");
 					}
 
-					UploadedDataTable.Rows.Add(row);
+					sqlDataTable.Rows.Add(row);
 
 				}
 			}
 
-			cat01Data = new DataTable();
-			cat01Data.Columns.Add("-");
-			cat02Data = new DataTable();
-			cat02Data.Columns.Add("-");
+			viewDataTable = new DataTable();
+			viewDataTable.Columns.Add("Catg");
+			viewDataTable.Columns.Add("-");
 
 			foreach (var column in columnList)
 			{
-				cat01Data.Columns.Add(column);
-				cat02Data.Columns.Add(column);
+				viewDataTable.Columns.Add(column);
 			}
 
-			//var cat01Row = cat01Data.NewRow();
+			var viewDataRow = viewDataTable.NewRow();
 
-			//foreach (Row rowItem in UploadedDataTable.Rows)
-			//{
-				
-			//}
+			int colCount = 0;
+			foreach (DataRow rowItem in sqlDataTable.Rows)
+			{
+				//if (rowItem["-"].ToString() == "Category01")
+				//{
+				if (colCount == 0)
+				{ 
+				viewDataRow[colCount] = rowItem["CategoryName"];
+				colCount++;
+				viewDataRow[colCount] = rowItem["ParameterName"];
+				colCount++;
+				viewDataRow[colCount] = rowItem["ParameterValue"];
+				colCount++;
+				}
+				else if (colCount < columnList.Count() + 2) 
+				{
+					viewDataRow[colCount] = rowItem["ParameterValue"];
+					colCount++;
+				}
+				else
+				{
+					viewDataTable.Rows.Add(viewDataRow);
+					viewDataRow = viewDataTable.NewRow();
+					colCount = 0;
+				}
 
+			}
+			viewDataTable.Rows.Add(viewDataRow);
 
 			return Page();
 		}
